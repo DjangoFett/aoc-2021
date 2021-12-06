@@ -1,23 +1,23 @@
 import numpy
 
 
-def bit_criteria(d):
-    return (sum(d) > len(d) / 2) or (sum(d) == len(d) / 2)
+bit_criteria = lambda d: (sum(d) > len(d) / 2) or (sum(d) == len(d) / 2)
+binary_to_decimal = lambda x: int("".join(x), 2)
+transpose = lambda x: numpy.array(x).transpose()
 
 
 def get_diagnostic_report(items):
-    diagnostics = numpy.array(items).transpose()
+    diagnostics = transpose(items)
     gamma = ["1" if bit_criteria(d) else "0" for d in diagnostics]
     epsilon = ["0" if x == "1" else "1" for x in gamma]
-    decimal = lambda x: int("".join(x), 2)
-    return decimal(gamma) * decimal(epsilon)
+    return binary_to_decimal(gamma) * binary_to_decimal(epsilon)
 
 
 def get_gas_reading(items, i, gas):
     if len(items) == 1:
-        return int("".join([str(x) for x in items[0]]), 2)
+        return binary_to_decimal([str(x) for x in items[0]])
 
-    diagnostics = numpy.array(items).transpose()
+    diagnostics = transpose(items)
     criteria = (
         bit_criteria(diagnostics[i])
         if gas == "o2"
